@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+require_relative 'lib/mkpw'
+require 'colorize'
+
+num_words = (ARGV.shift || 2).to_i
+how_many = (ARGV.shift || 2).to_i
+passme = Passme.new
+how_many.times do |y|
+  word_color = y.odd? ? :blue : :light_green
+  sep_color = :magenta
+  length = 0
+  out = []
+  passme.generate(num_words).each_with_index do |component, index|
+    length += component.length
+    out << component.colorize(index.even? ? word_color : sep_color)
+  end
+  puts "#{length} chars =>  #{out.join}"
+end
+
