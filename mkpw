@@ -2,18 +2,23 @@
 require_relative 'lib/mkpw'
 require 'colorize'
 
+# should add a nice cli gem, i know there are tons
+# tons of options.
+
 num_words = (ARGV.shift || 2).to_i
 how_many = (ARGV.shift || 2).to_i
-passme = Passme.new
+mkpw = Mkpw.new
 how_many.times do |y|
   word_color = y.odd? ? :blue : :light_green
   sep_color = :magenta
+
+  components = mkpw.generate_word_pass(word_qty: num_words)
   length = 0
-  out = []
-  passme.generate(num_words).each_with_index do |component, index|
-    length += component.length
-    out << component.colorize(index.even? ? word_color : sep_color)
-  end
-  puts "#{length} chars =>  #{out.join}"
+  thy_royal_pass = components[:words].map { |w|
+    length += w.length + components[:seperator].length
+    w.colorize(word_color)
+  }.join(components[:seperator].colorize(sep_color))
+
+  puts "#{length} chars =>  #{thy_royal_pass}"
 end
 

@@ -1,36 +1,24 @@
 #!/usr/bin/env ruby
 
-class Passme
+class Mkpw
+  attr_accessor :components
   def initialize
-    @word_list = File.readlines('/usr/share/dict/words')
-  end
-    
-  def generate(words=2)
-    sep = [randnum, randsymbol].shuffle.join
-    (0...words).map do |x|
-      out = [randword] 
-      if x > 0 then out.unshift(sep) end
-      out
-    end.flatten
+    @components = {
+      words: File.readlines('/usr/share/dict/words'),
+      nums: (0..9).to_a,
+      alphas: ('a'..'z').to_a + ('A'..'Z').to_a,
+      symbols: ',./<>?;:-=_+&*%^#$!@~|'.chars
+    }
+    true
   end
 
-  def randfrom(qty=1, set)
-    (0...qty).map { set.sample }.join
+  def generate_word_pass(word_qty: 2)
+    {seperator: compose.join, words: components[:words].sample(word_qty).map(&:chomp)}
   end
 
-  def randword
-    randfrom(@word_list).chomp
-  end
-
-  def randnum(qty=1)
-    randfrom(qty, (0..9).to_a)
-  end
-
-  def randalpha(qty=1)
-    randfrom(qty, ('a'..'z').to_a + ('A'..'Z').to_a)
-  end
-
-  def randsymbol(qty=1)
-    randfrom(qty, ',./<>?;:-=_+&*%^#$!@~|'.chars)
+  def compose(width: 2, weights: {nums: 0.5, symbols: 0.5})
+    total = 0
+    weights.map {|set,weight| total += weight}
+    weights.map {|set,weight| components[set].sample((weight / total) * width)}.shuffle
   end
 end
