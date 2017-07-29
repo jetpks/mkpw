@@ -1,13 +1,18 @@
 #!/usr/bin/env ruby
-require_relative 'lib/mkpw'
+require 'thor'
 require 'colorize'
+require_relative 'lib/mkpw'
+mkpw = Mkpw.new
 
-# should add a nice cli gem, i know there are tons
-# tons of options.
+class Frontend < Thor
+  def rand(width: 2)
+    mkpw.compose(width: width)
+  end
+
+end
 
 num_words = (ARGV.shift || 2).to_i
 how_many = (ARGV.shift || 2).to_i
-mkpw = Mkpw.new
 how_many.times do |y|
   word_color = y.odd? ? :blue : :light_green
   sep_color = :magenta
