@@ -1,14 +1,7 @@
 #!/usr/bin/env ruby
-require 'thor'
-require 'colorize'
 require_relative 'lib/mkpw'
-mkpw = Mkpw.new
 
-#class Frontend < Thor
-#  def rand(width: 2)
-#    mkpw.compose(width: width)
-#  end
-#end
+mkpw = Mkpw.new
 
 num_words = (ARGV.shift || 2).to_i
 how_many = (ARGV.shift || 2).to_i
@@ -25,4 +18,3 @@ how_many.times do |y|
 
   puts "#{length} chars =>  #{thy_royal_pass}"
 end
-

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'colorize'
 
 class Mkpw
   attr_reader :words, :nums, :alphas, :symbols, :components
