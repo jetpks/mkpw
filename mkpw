@@ -10,6 +10,9 @@ how_many.times do |y|
   sep_color = :magenta
 
   components = mkpw.generate_word_pass(word_qty: num_words)
+  if components[:words].count == 1
+    components[:words] << ""
+  end
   length = 0
   thy_royal_pass = components[:words].map { |w|
     length += w.length + components[:seperator].length
