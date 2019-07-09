@@ -1,9 +1,11 @@
 module Mkpw
 
+  ##
   # Mkpw::Words supplies groups of random words selected from a file loaded at
   # runtime.
   #
   # @param from_file *optional* File from which to load words
+  #
   class Words
     attr_reader :words
 
@@ -11,6 +13,7 @@ module Mkpw
       load_words_from_file!(from_file || WORDS_FILE)
     end
 
+    ##
     # Words#select returns one or more words optionally with a random character
     # in the each word capitalized
     #
@@ -19,14 +22,11 @@ module Mkpw
     #   character in each selected word; defaults to false
     #
     # @return [Array] of selected words
+    #
     def select(quantity: 1, with_random_upper: false)
-      words.sample(quantity).tap do |selected_words|
-        if with_random_upper
-          selected_words.each do |word|
-            random_upper!(word)
-          end
-        end
-      end
+      selection = []
+      quantity.times { selection << words.sample }
+      selection.map { |word| random_upper!(word) if with_random_upper }
     end
 
     private
