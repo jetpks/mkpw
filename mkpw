@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require_relative 'lib/mkpw'
 
 mkpw = Mkpw.new
@@ -10,14 +12,12 @@ how_many.times do |y|
   sep_color = :magenta
 
   components = mkpw.generate_word_pass(word_qty: num_words)
-  if components[:words].count == 1
-    components[:words] << ""
-  end
+  components[:words] << '' if components[:words].count == 1
   length = 0
-  thy_royal_pass = components[:words].map { |w|
+  thy_royal_pass = components[:words].map do |w|
     length += w.length + components[:seperator].length
     w.colorize(word_color)
-  }.join(components[:seperator].colorize(sep_color))
+  end.join(components[:seperator].colorize(sep_color))
 
   puts "#{length} chars =>  #{thy_royal_pass}"
 end

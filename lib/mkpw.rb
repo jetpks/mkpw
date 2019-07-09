@@ -1,4 +1,5 @@
-#!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'colorize'
 
 class Mkpw
@@ -15,13 +16,13 @@ class Mkpw
   end
 
   def generate_word_pass(word_qty: 2)
-    {seperator: compose.join, words: words.sample(word_qty).map(&:chomp)}
+    { seperator: compose.join, words: words.sample(word_qty).map(&:chomp) }
   end
 
-  def compose(width: 2, weights: {nums: 0.5, symbols: 0.5})
+  def compose(width: 2, weights: { nums: 0.5, symbols: 0.5 })
     total = 0
-    weights.map {|set,weight| total += weight}
-    weights.map {|set,weight| components[set.to_sym].sample((weight / total) * width)}.shuffle
+    weights.map { |_set, weight| total += weight }
+    weights.map { |set, weight| components[set.to_sym].sample((weight / total) * width) }.shuffle
   end
 
   # componentes
@@ -42,6 +43,7 @@ class Mkpw
   end
 
   private
+
   attr_reader :rng
   def prep_words(list: nil)
     list ||= File.readlines(@default_word_list_path).map(&:chomp)
