@@ -6,11 +6,9 @@ module Mkpw
   #
   # @param from_file *optional* File from which to load words
   #
-  class Words
-    attr_reader :words
-
-    def initialize(from_file: nil)
-      load_words_from_file!(from_file || WORDS_FILE)
+  class Words < Constituents
+    def initialize(from_file: nil, add: nil, only: nil)
+      super(load_words_from_file!(from_file || WORDS_FILE), add: add, only: only)
     end
 
     ##
@@ -23,17 +21,15 @@ module Mkpw
     #
     # @return [Array] of selected words
     #
-    def select(quantity: 1, with_random_upper: false)
-      selection = []
-      quantity.times { selection << words.sample }
-      selection.map { |word| random_upper!(word) if with_random_upper }
+    def select_random(quantity: 1, with_random_upper: false)
+      super(quantity: quantity).map { |word| random_upper!(word) if with_random_upper }
     end
 
     private
 
     def load_words_from_file!(file)
       raise Mkpw::FileUnreadableError, file unless File.readable?(file)
-      @words = File.readlines(file).map(&:chomp).freeze
+      File.readlines(file).map(&:chomp).freeze
     end
 
     def random_upper!(word)
