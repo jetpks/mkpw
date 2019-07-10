@@ -18,6 +18,20 @@ describe Mkpw::Constituents do
         expect(subject.new(basic_set).items.frozen?).to be true
       end
 
+      it 'adds characters to the set when asked' do
+        expect(subject.new(basic_set, add: ['λ']).items).to include 'λ'
+        expect(subject.new(basic_set, add: ['λ']).items).not_to eq(basic_set)
+      end
+
+      it 'uses only the provided characters when asked' do
+        items = subject.new(basic_set, only: ['λ', 'ê']).items
+        expect(items.length).to eq(2)
+        expect(items).to include ('ê')
+        expect(items).not_to include ('a')
+        expect(items).not_to eq(basic_set)
+      end
+
+
       it 'raises an error when passed non-strings' do
         expect { subject.new([0]) }.to raise_error(Mkpw::NotAString)
         expect { subject.new([[]]) }.to raise_error(Mkpw::NotAString)
