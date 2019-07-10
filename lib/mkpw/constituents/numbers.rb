@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mkpw
   DEFAULT_NUMBERS = (0..9).map(&:to_s).freeze
 

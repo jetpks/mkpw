@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module Mkpw
-  DEFAULT_SYMBOLS = %w{ , . / < > ? ; : - = _ + & * % ^ # $ ! @ ~ | }
+  DEFAULT_SYMBOLS = %w[, . / < > ? ; : - = _ + & * % ^ # $ ! @ ~ |].freeze
 
   class Symbols < Constituents
     def initialize(add: nil, only: nil)

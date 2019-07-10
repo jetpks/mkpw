@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mkpw
   DEFAULT_ALPHAS = (('a'..'z').to_a + ('A'..'Z').to_a).freeze
 

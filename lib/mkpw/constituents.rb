@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mkpw
   class Constituents
     extend Forwardable
@@ -15,11 +17,11 @@ module Mkpw
 
     def initialize(items, add: nil, only: nil)
       resulting_set = if !only.nil?
-        only
-      elsif !add.nil?
-        items + add
-      else
-        items
+                        only
+                      elsif !add.nil?
+                        items + add
+                      else
+                        items
       end
 
       validate!(resulting_set)

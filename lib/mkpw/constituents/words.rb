@@ -1,5 +1,6 @@
-module Mkpw
+# frozen_string_literal: true
 
+module Mkpw
   ##
   # Mkpw::Words supplies groups of random words selected from a file loaded at
   # runtime.
@@ -29,6 +30,7 @@ module Mkpw
 
     def load_words_from_file!(file)
       raise Mkpw::FileUnreadableError, file unless File.readable?(file)
+
       File.readlines(file).map(&:chomp).freeze
     end
 
