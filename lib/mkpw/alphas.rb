@@ -3,15 +3,7 @@ module Mkpw
 
   class Alphas < Constituents
     def initialize(add: nil, only: nil)
-      alphas_set = if !only.nil?
-        only
-      elsif !add.nil?
-        DEFAULT_ALPHAS + add
-      else
-        DEFAULT_ALPHAS
-      end
-
-      super(alphas_set)
+      super(DEFAULT_ALPHAS, add: add, only: only)
     end
   end
 end
