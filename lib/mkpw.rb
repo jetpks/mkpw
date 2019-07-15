@@ -1,8 +1,31 @@
 # frozen_string_literal: true
 
 require 'colorize'
+require 'forwardable'
 
-class Mkpw
+module Mkpw
+  WORDS_FILE = File.join(File.dirname(__FILE__), 'static/words')
+end
+
+require_relative 'mkpw/errors'
+require_relative 'mkpw/constituents'
+require_relative 'mkpw/constituents/alphas'
+require_relative 'mkpw/constituents/numbers'
+require_relative 'mkpw/constituents/symbols'
+require_relative 'mkpw/constituents/words'
+
+module Mkpw
+  COMPONENTS = {
+    alphas: Alphas.new,
+    numbers: Numbers.new,
+    symbols: Symbols.new,
+    words: Words.new
+  }.freeze
+end
+
+require_relative 'mkpw/ugly_pass'
+
+class OldMkpw
   attr_reader :words, :nums, :alphas, :symbols, :components
   def initialize(alphas_list: nil, nums_list: nil, symbols_list: nil, words_list: nil)
     @rng = Random.new
