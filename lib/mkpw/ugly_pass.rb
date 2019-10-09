@@ -48,36 +48,17 @@ module Mkpw
 
     def initialize(length: 2, weights: { numbers: 0.5, symbols: 0.5 })
       @length = length
-      @weights = weights
+      @weights = weights.freeze
     end
 
     def weights=(new_weights)
       reset!
-      @weights = new_weights
-    end
-
-    # this is a giant cluster fuck and just needs to be redone
-
-    def new_generate
-      pw = Array.new(length)
+      @weights = new_weights.freeze
     end
 
     def generate
-      run_length_encoding = scaffold
-        .take(length) # take first `#length` -- only matters when length < proportions.length
-        .map { |p| p.transform_values { |w| (w * length).ceil } }
-
-      until length == run_length_encoding.reduce(0) { |m, v| m + v.values.first }
-        # Reduce lengths
-        #   1. go through each charset to determine how far off each one is from the
-        #     original weights
-        #   2. skip weights that only have 1 length
-        #   2. reduce the furthest over by one, then recalculate
-        #
-      end
-
-      run_length_encoding
-        .map { |p| Mkpw::COMPONENTS[p.keys.first].select_random(quantity: p.values.first) }
+      scaffold
+        .map { |component, quantity| Mkpw::COMPONENTS[component].select_random(quantity: quantity) }
         .flatten
         .shuffle
         .join
@@ -85,7 +66,6 @@ module Mkpw
 
     private
 
-    attr_reader :proportions
     def components
       Mkpw::COMPONENTS
     end
@@ -107,13 +87,28 @@ module Mkpw
     end
 
     def scaffold
-      @scaffold ||= proportions
-        .map { |k, v| { k => v } } # turn the proportions into a sortable array
-        .group_by { |p| p.values.first } # split into partitions by proportion value
-        .transform_values(&:shuffle) # randomize order inside partitions
-        .values # strip off `group_by` keys
-        .sort { |a, b| b.first.values.first <=> a.first.values.first } # order parts by weight
-        .flatten # reduce to array of hashes with single k/v pairs
+      optimal = proportions.transform_values { |v| (v * length) }
+      rle = optimal.transform_values(&:ceil)
+
+      until rle.values.reduce(&:+) == length
+        candidates = rle.filter { |_, v| v > 1 }
+
+        # edge case: all 1s; this means length < scaffold.size
+        if candidates.empty?
+          rle.delete(rle.keys.sample)
+          next
+        end
+
+        highest_variance = candidates
+                           .map { |k, v| { k => v - optimal[k] } }
+                           .max { |a, b| a.values.first <=> b.values.first }
+                           .keys
+                           .first
+
+        rle[highest_variance] = rle[highest_variance] - 1
+      end
+
+      rle
     end
   end
 end
