@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Mkpw::Words do
   let(:fake_test_words_file) { FIXTURE_DIR.join('files/fake_test_words') }
   let(:default_words_count) { 235_886 }

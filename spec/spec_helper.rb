@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 require 'pathname'
+require 'rspec'
 
 require_relative '../lib/mkpw'
 
