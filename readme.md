@@ -16,7 +16,24 @@ this: `Bright5*foRthy`
 * Just as secure as any other similar length password.
 * Still meets arcane complexity requirements by separating words with a random
   number and symbol.
-* The tool can also make very long passwords: 
+* The tool can also make very long passwords:
   `cLubland>5cryptaRch>5cirCumambages>5unOwed>5venoMsome>5Eland`
 
+## Interface
 
+```bash
+  -c, --chars= <integer> # exactly this length
+  -g, --greater-than= <integer> # longer than <integer> characters; must be < less-than
+  -l, --less-than= <integer> # shorter than <integer> characters; must be > greater-than
+
+  -A, --no-alpha[s] # don't use characters from the alphabet (s optional)
+  -N, --no-number[s] # don't use numbers
+  -S, --no-special[s] # don't use specials
+  -W, --no-word[s] # don't use words
+
+  -s, --seperator= <integer> # length of word seperator; defaults to 2; no effect without words enabled; 0 disables seperator
+  -q, --quantity= <integer> # quantity of passwords to generate
+
+```
+
+So
