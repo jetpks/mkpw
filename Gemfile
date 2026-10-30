@@ -1,4 +1,4 @@
 source 'https://rubygems.org/'
 
-gem 'thor', '~> 0.19.1'
+gem 'thor', '~> 1.4'
 gem 'colorize', '~> 0.7.7'
