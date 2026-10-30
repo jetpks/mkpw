@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every supported minor, from the floor to the dev version; mise
+        # resolves each to its latest patch.
+        ruby: ["3.4", "4.0"]
+    env:
+      BUNDLE_PATH: vendor/bundle
+      MISE_RUBY_VERSION: ${{ matrix.ruby }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@v4
+      - uses: actions/cache@v6
+        with:
+          path: vendor/bundle
+          key: bundle-ruby-${{ matrix.ruby }}-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: bundle-ruby-${{ matrix.ruby }}-
+      # mkpw reads /usr/share/dict/words, which macOS ships but ubuntu
+      # runners do not — install the word list only when it is missing.
+      - run: '[ -f /usr/share/dict/words ] || sudo apt-get install -y --no-install-recommends wamerican'
+      - run: bundle install
+      # No test suite exists; the gate is the CLI smoke — 2 passwords of
+      # 3 words each must print and exit 0.
+      - run: bundle exec ruby mkpw 3 2
